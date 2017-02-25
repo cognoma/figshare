@@ -86,7 +86,6 @@ class Figshare:
         url = self.endpoint("/account/articles")
         headers = self.get_headers(self.token)
         response = self.issue_request('POST', url, headers=headers, data=data)
-        response = json.loads(response.body_string())
 
         if "error" not in response:
             article_id = int(response["location"].split("/")[-1])
@@ -108,7 +107,6 @@ class Figshare:
         headers = self.get_headers(token=self.token)
         response = issue_request('PUT', url, headers=headers,
                                  data=json.dumps(body))
-        response = json.loads(response.text)
         return response
 
     def get_article_details(self, article_id):
@@ -119,8 +117,7 @@ class Figshare:
             url = self.endpoint('/articles/{}'.format(article_id))
         headers = self.get_headers(self.token)
         response = issue_request('GET', url, headers=headers)
-        details = json.loads(response.body_string())
-        return details
+        return response
 
     def list_files(self, article_id):
         """ List all the files associated with a given article. """
@@ -131,8 +128,7 @@ class Figshare:
             url = self.endpoint('/articles/{}/files'.format(article_id))
         headers = self.get_headers(self.token)
         response = issue_request('GET', url, headers=headers)
-        files = json.loads(response.body_string())
-        return files
+        return response
 
     def get_file_details(self, article_id, file_id):
         """ Get the details about a file associated with a given article. """
@@ -144,5 +140,6 @@ class Figshare:
                                 format(article_id, file_id))
         response = issue_request('GET', url,
                                  headers=self.get_headers(token=self.token))
-        response = json.loads(response.body_string())
         return response
+
+  
