@@ -1,8 +1,4 @@
-import sys
-import os
-import hashlib
 import json
-
 import requests
 
 from requests.exceptions import HTTPError
@@ -80,10 +76,13 @@ class Figshare:
     update_article(article_id)
         Update existing article
 
-    get_article_details(article_id)
+    get_article_details(article_id, version)
         Get some information about a article
 
-    list_files(article_id)
+    list_article_versions(article_id)
+        List versions of the given article
+
+    list_files(article_id, version)
         List files within a given article
 
     get_file_details(article_id, file_id)
@@ -181,7 +180,40 @@ class Figshare:
                                  data=json.dumps(body))
         return response
 
-    def get_article_details(self, article_id):
+    def get_article_details(self, article_id, version=None):
+        """ Return the details of an article with a given article ID.
+
+        Parameters
+        ----------
+        article_id : str or id
+            Figshare article ID
+
+        version : str or id, default is None
+            Figshare article version. If None, selects the most recent version.
+
+        Returns
+        -------
+        response : dict
+            HTTP request response as a python dict
+        """
+        if version is None:
+            if self.private:
+                url = self.endpoint('/account/articles/{}'.format(article_id))
+            else:
+                url = self.endpoint('/articles/{}'.format(article_id))
+        else:
+            if self.private:
+                # Not supported by the Figshare API
+                pass
+            else:
+                url = self.endpoint('/articles/{}/versions/{}'.format(
+                    article_id,
+                    version))
+        headers = self.get_headers(self.token)
+        response = issue_request('GET', url, headers=headers)
+        return response
+
+    def list_article_versions(self, article_id):
         """ Return the details of an article with a given article ID.
 
         Parameters
@@ -195,14 +227,14 @@ class Figshare:
             HTTP request response as a python dict
         """
         if self.private:
-            url = self.endpoint('/account/articles/{}'.format(article_id))
+            pass
         else:
-            url = self.endpoint('/articles/{}'.format(article_id))
+            url = self.endpoint('/articles/{}/versions'.format(article_id))
         headers = self.get_headers(self.token)
         response = issue_request('GET', url, headers=headers)
         return response
 
-    def list_files(self, article_id):
+    def list_files(self, article_id, version=None):
         """ List all the files associated with a given article.
 
         Parameters
@@ -210,19 +242,26 @@ class Figshare:
         article_id : str or int
             Figshare article ID
 
+        version : str or id, default is None
+            Figshare article version. If None, selects the most recent version.
+
         Returns
         -------
         response : dict
             HTTP request response as a python dict
         """
-        if self.private:
-            url = self.endpoint('/account/articles/{}/files'.
-                                format(article_id))
+        if version is None:
+            if self.private:
+                url = self.endpoint('/account/articles/{}/files'.
+                                    format(article_id))
+            else:
+                url = self.endpoint('/articles/{}/files'.format(article_id))
+            headers = self.get_headers(self.token)
+            response = issue_request('GET', url, headers=headers)
+            return response
         else:
-            url = self.endpoint('/articles/{}/files'.format(article_id))
-        headers = self.get_headers(self.token)
-        response = issue_request('GET', url, headers=headers)
-        return response
+            request = self.get_article_details(article_id, version)
+            return request['files']
 
     def get_file_details(self, article_id, file_id):
         """ Get the details about a file associated with a given article.
