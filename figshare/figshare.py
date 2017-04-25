@@ -1,6 +1,5 @@
 import json
 import requests
-
 from requests.exceptions import HTTPError
 
 
@@ -41,7 +40,7 @@ def issue_request(method, url, headers, data=None, binary=False):
         except ValueError:
             response_data = response.content
     except HTTPError as error:
-        print('Caught an HTTPError: {}'.format(error.message))
+        print('Caught an HTTPError: {}'.format(error))
         print('Body:\n', response.text)
         raise
 
@@ -203,8 +202,10 @@ class Figshare:
                 url = self.endpoint('/articles/{}'.format(article_id))
         else:
             if self.private:
-                # Not supported by the Figshare API
-                pass
+                # Not supported by the Figshare V2 API
+                url = self.endpoint('/account/articles/{}/versions/{}'.format(
+                    article_id,
+                    version))
             else:
                 url = self.endpoint('/articles/{}/versions/{}'.format(
                     article_id,
@@ -218,7 +219,7 @@ class Figshare:
 
         Parameters
         ----------
-        article_id : str or id
+        article_id : str or int
             Figshare article ID
 
         Returns
