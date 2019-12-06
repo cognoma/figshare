@@ -8,6 +8,7 @@ following actions are implemented
 * get_article_details
 * list_files
 * get_file_details
+* retrieve_files_from_article
 
 ## Install
 
