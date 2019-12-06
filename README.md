@@ -43,7 +43,6 @@ That will produce a dictionary object.  Here's a snippet of the first and last f
 'embargo_date': None,
 'citation': 'Lake, Sean; Wright, Edward L.; Assef, Roberto J.; Jarrett, Thomas H.; Petty, Sara; Stanford, Spencer A.; et al. (2019): Evolving Extragalactic Background and Luminosity Density. figshare. Dataset. https://doi.org/10.6084/m9.figshare.4757131.v1',
 'url_private_api': 'https://api.figshare.com/v2/account/articles/4757131',
-...
 'status': 'public',
 'created_date': '2019-08-07T07:54:50Z',
 'group_id': None,
