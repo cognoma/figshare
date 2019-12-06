@@ -11,12 +11,16 @@ following actions are implemented
 
 ## Install
 
-    $ git clone https://github.com/cognoma/figshare.git
-    $ python setup.py install
+```shell
+git clone https://github.com/cognoma/figshare.git
+python setup.py install
+```
 
 For development, I recommend:
 
-    $ python setup.py develop
+```shell
+python setup.py develop
+```
 
 ## Execution
 
@@ -25,7 +29,7 @@ retrieving information from Figshare API. This was done using
 [iPython](https://ipython.readthedocs.io/en/stable/), but
 other Python-based methods will work as well:
 
-```
+```python
 from figshare.figshare import Figshare
 fs = Figshare()
 article_id = 4757131
@@ -34,7 +38,7 @@ fs.get_article_details(article_id)
 
 That will produce a dictionary object.  Here's a snippet of the first and last few lines:
 
-```
+```json
 {'defined_type_name': 'dataset',
 'embargo_date': None,
 'citation': 'Lake, Sean; Wright, Edward L.; Assef, Roberto J.; Jarrett, Thomas H.; Petty, Sara; Stanford, Spencer A.; et al. (2019): Evolving Extragalactic Background and Luminosity Density. figshare. Dataset. https://doi.org/10.6084/m9.figshare.4757131.v1',
