@@ -87,6 +87,9 @@ class Figshare:
     get_file_details(article_id, file_id)
         Print file details
 
+    retrieve_files_from_article(article_id)
+        Retrieve files and save them locally.
+
     """
     def __init__(self, token=None, private=False):
         self.baseurl = "https://api.figshare.com/v2"
@@ -293,6 +296,9 @@ class Figshare:
 
     def retrieve_files_from_article(self, article_id):
         """ Retrieve files and save them locally.
+
+        Files will be stored in the current working directory under folder
+        called figshare_<article_id>
 
         Parameters
         ----------
