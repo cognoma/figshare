@@ -1,7 +1,7 @@
 import json
 import requests
 from requests.exceptions import HTTPError
-
+import os
 
 def issue_request(method, url, headers, data=None, binary=False):
     """Wrapper for HTTP request
@@ -290,3 +290,27 @@ class Figshare:
         response = issue_request('GET', url,
                                  headers=self.get_headers(token=self.token))
         return response
+
+    def retrieve_files_from_article(self, article_id):
+        """ Retrieve files and save them locally.
+
+        Parameters
+        ----------
+        article_id : str or int
+            Figshare article ID
+
+        """
+
+        # Get list of files
+        file_list = self.list_files(article_id)
+
+        n_files = len(file_list)
+        if n_files != 0:
+            dir0 = "figshare_{0}/".format(article_id)
+            os.mkdir(dir0)
+            for ii in range(n_files):
+               t_name = dir0 + file_list[ii]['name']
+               t_url  = file_list[ii]['download_url']
+
+               r = requests.get(t_url, allow_redirects=True)
+               open(t_name, 'wb').write(r.content)
