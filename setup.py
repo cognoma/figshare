@@ -52,7 +52,7 @@ setuptools.setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'requests == 2.11.1',
+        'requests == 2.20.0',
         'pytest == 3.0.4',
     ],
 
