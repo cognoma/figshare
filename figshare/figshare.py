@@ -1,7 +1,8 @@
 import json
 import requests
 from requests.exceptions import HTTPError
-
+import os
+from urllib.request import urlretrieve
 
 def issue_request(method, url, headers, data=None, binary=False):
     """Wrapper for HTTP request
@@ -86,6 +87,9 @@ class Figshare:
 
     get_file_details(article_id, file_id)
         Print file details
+
+    retrieve_files_from_article(article_id)
+        Retrieve files and save them locally.
 
     """
     def __init__(self, token=None, private=False):
@@ -290,3 +294,29 @@ class Figshare:
         response = issue_request('GET', url,
                                  headers=self.get_headers(token=self.token))
         return response
+
+    def retrieve_files_from_article(self, article_id, directory=None):
+        """ Retrieve files and save them locally.
+
+        By default, files will be stored in the current working directory
+        under a folder called figshare_<article_id> by default.
+        Specify <outpath> for: <outpath>/figshare_<article_id>
+
+        Parameters
+        ----------
+        article_id : str or int
+            Figshare article ID
+
+        """
+
+        if directory is None:
+            directory = os.getcwd()
+
+        # Get list of files
+        file_list = self.list_files(article_id)
+
+        dir0 = os.path.join(directory, "figshare_{0}/".format(article_id))
+        os.makedirs(dir0, exist_ok=True) # This might require Python >=3.2
+
+        for file_dict in file_list:
+            urlretrieve(file_dict['download_url'], os.path.join(dir0, file_dict['name']))
