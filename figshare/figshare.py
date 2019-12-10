@@ -309,7 +309,7 @@ class Figshare:
         """
 
         if directory is None:
-            directory = ''
+            directory = os.getcwd()
 
         # Get list of files
         file_list = self.list_files(article_id)
