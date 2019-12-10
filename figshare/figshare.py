@@ -2,6 +2,7 @@ import json
 import requests
 from requests.exceptions import HTTPError
 import os
+from urllib.request import urlretrieve
 
 def issue_request(method, url, headers, data=None, binary=False):
     """Wrapper for HTTP request
@@ -318,5 +319,4 @@ class Figshare:
         os.makedirs(dir0, exist_ok=True) # This might require Python >=3.2
 
         for file_dict in file_list:
-            r = requests.get(file_dict['download_url']) #Will redirect
-            open(file_dict['name'], 'wb').write(r.content)
+            urlretrieve(file_dict['download_url'], os.path.join(dir0, file_dict['name']))
