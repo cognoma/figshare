@@ -314,11 +314,9 @@ class Figshare:
         # Get list of files
         file_list = self.list_files(article_id)
 
-        n_files = len(file_list)
-        if n_files != 0:
-            dir0 = os.path.join(directory, "figshare_{0}/".format(article_id))
-            os.makedirs(dir0, exist_ok=True) # This might require Python >=3.2
+        dir0 = os.path.join(directory, "figshare_{0}/".format(article_id))
+        os.makedirs(dir0, exist_ok=True) # This might require Python >=3.2
 
-            for file_dict in file_list:
-               r = requests.get(file_dict['download_url']) #Will redirect
-               open(file_dict['name'], 'wb').write(r.content)
+        for file_dict in file_list:
+            r = requests.get(file_dict['download_url']) #Will redirect
+            open(file_dict['name'], 'wb').write(r.content)
